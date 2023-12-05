@@ -1,10 +1,8 @@
 package com.youni.Youni.controller;
 
-import com.youni.Youni.dto.UniCourseDto;
-import com.youni.Youni.entity.Courses;
+import com.youni.Youni.entity.UniversityCourse;
 import com.youni.Youni.service.YouniService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +17,7 @@ public class YouniController {
   private YouniService youniService;
 
   @GetMapping
-  public List<Courses> getAllCourses() {
+  public List<UniversityCourse> getAllCourses() {
 
 
     return youniService.getAllCourse();

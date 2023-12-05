@@ -1,6 +1,6 @@
 package com.youni.Youni.service.impl;
 
-import com.youni.Youni.entity.Courses;
+import com.youni.Youni.entity.UniversityCourse;
 import com.youni.Youni.repository.YouniRepository;
 import com.youni.Youni.service.YouniService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ public class YouniServiceImpl implements YouniService {
   YouniRepository youniRepository;
 
   @Override
-  public List<Courses> getAllCourse() {
+  public List<UniversityCourse> getAllCourse() {
     return youniRepository.findAll();
   }
 }
