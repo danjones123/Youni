@@ -9,18 +9,18 @@ import javax.persistence.*;
 @Setter
 @Builder
 @AllArgsConstructor
-//@NoArgsConstructor
+@NoArgsConstructor
 @Table(name = "university_course")
 public class UniversityCourse {
 
 
   @Id
   @Column(name="university_course_id", nullable = false)
-  private Integer courseId;
+  private Integer universityCourseId;
 
-  @Column(name="subject_id")
+  @JoinColumn(name="university_subject_id")
   @ManyToOne
-  private Subject subjectId;
+  private UniversitySubject universitySubject;
 
   @Column(name="university_course_name")
   private String universityCourseName;
@@ -30,7 +30,6 @@ public class UniversityCourse {
   private String degreeType;
   @Column(name="UCAS_code")
   private String ucasCode;
-
   @Column(name="required_grades_letters_upper")
   private String requiredGradesLettersUpper;
   @Column(name="required_grades_letters_lower")

@@ -1,6 +1,6 @@
 package com.youni.Youni.controller;
 
-import com.youni.Youni.entity.UniversityCourse;
+import com.youni.Youni.entity.*;
 import com.youni.Youni.service.YouniService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +16,33 @@ public class YouniController {
   @Autowired
   private YouniService youniService;
 
-  @GetMapping
-  public List<UniversityCourse> getAllCourses() {
+  @GetMapping("/course")
+  public List<UniversityCourse> getAllUniCourses() {
 
-
-    return youniService.getAllCourse();
+    return youniService.getAllUniCourse();
   }
+
+  @GetMapping("/subject")
+  public List<UniversitySubject> getAllUniSubject() {
+
+    return youniService.getAllUniSubject();
+  }
+
+  @GetMapping("/university")
+  public List<University> getAllUniversity() {
+
+    return youniService.getAllUniversity();
+  }
+
+  @GetMapping("/alevel")
+  public List<AlevelSubject> getAllAlevelSubject() {
+
+    return youniService.getAllAlevelSubject();
+  }
+
+  @GetMapping("/compkey")
+  public List<CombineUniversityCourseAlevelSubject> getAllCompKey() {
+    return youniService.getAllCompKey();
+  }
+
 }

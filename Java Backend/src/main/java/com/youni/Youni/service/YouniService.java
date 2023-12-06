@@ -1,11 +1,19 @@
 package com.youni.Youni.service;
 
-import com.youni.Youni.entity.UniversityCourse;
+import com.youni.Youni.entity.*;
 
 import java.util.List;
 
 public interface YouniService {
 
 
-  public List<UniversityCourse> getAllCourse();
+  List<UniversityCourse> getAllUniCourse();
+
+  List<UniversitySubject> getAllUniSubject();
+
+  List<University> getAllUniversity();
+
+  List<AlevelSubject> getAllAlevelSubject();
+
+  List<CombineUniversityCourseAlevelSubject> getAllCompKey();
 }

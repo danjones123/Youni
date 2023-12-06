@@ -1,7 +1,7 @@
 package com.youni.Youni.service.impl;
 
-import com.youni.Youni.entity.UniversityCourse;
-import com.youni.Youni.repository.YouniRepository;
+import com.youni.Youni.entity.*;
+import com.youni.Youni.repository.*;
 import com.youni.Youni.service.YouniService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,10 +12,43 @@ import java.util.List;
 public class YouniServiceImpl implements YouniService {
 
   @Autowired
-  YouniRepository youniRepository;
+  UniversityCourseRepository courseRepository;
+
+  @Autowired
+  UniversitySubjectRepository subjectRepository;
+
+  @Autowired
+  UniversityRepository universityRepository;
+
+  @Autowired
+  AlevelSubjectRepository alevelSubjectRepository;
+
+  @Autowired
+  CompKeyTest compKeyTest;
+
 
   @Override
-  public List<UniversityCourse> getAllCourse() {
-    return youniRepository.findAll();
+  public List<UniversityCourse> getAllUniCourse() {
+    return courseRepository.findAll();
+  }
+
+  @Override
+  public List<UniversitySubject> getAllUniSubject() {
+    return subjectRepository.findAll();
+  }
+
+  @Override
+  public List<University> getAllUniversity() {
+    return universityRepository.findAll();
+  }
+
+  @Override
+  public List<AlevelSubject> getAllAlevelSubject() {
+    return alevelSubjectRepository.findAll();
+  }
+
+  @Override
+  public List<CombineUniversityCourseAlevelSubject> getAllCompKey() {
+    return compKeyTest.findAll();
   }
 }
