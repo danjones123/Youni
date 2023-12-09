@@ -18,6 +18,11 @@ public class UniversityCourse {
   @Column(name="university_course_id", nullable = false)
   private Integer universityCourseId;
 
+  @JoinColumn(name="university_id")
+  @ManyToOne
+  private University university;
+
+
   @JoinColumn(name="university_subject_id")
   @ManyToOne
   private UniversitySubject universitySubject;

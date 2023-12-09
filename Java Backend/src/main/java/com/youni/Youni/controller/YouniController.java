@@ -1,14 +1,15 @@
 package com.youni.Youni.controller;
 
 import com.youni.Youni.dto.AddSubjectDto;
+import com.youni.Youni.dto.AddSubjectRankingDto;
 import com.youni.Youni.entity.*;
 import com.youni.Youni.exception.UniversityNotFoundException;
+import com.youni.Youni.exception.UniversitySubjectNotFoundException;
 import com.youni.Youni.service.YouniService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.http.HttpRequest;
 import java.util.List;
 
 @RestController
@@ -44,18 +45,28 @@ public class YouniController {
 
   @GetMapping("/compkey")
   public List<CombineUniversityCourseAlevelSubject> getAllCompKey() {
-    return youniService.getAllCompKey();
+    return youniService.getAllUniCourseAlevelCompKey();
+  }
+
+  @PostMapping("/subjectRank")
+  public ResponseEntity<?> addSubject(@RequestBody AddSubjectRankingDto subjectRankingDto) {
+
+    try {
+      return ResponseEntity.ok().body(youniService.addNewSubjectRanking(subjectRankingDto));
+    } catch (UniversityNotFoundException | UniversitySubjectNotFoundException e) {
+      return ResponseEntity.internalServerError().body(e.getMessage());
+    }
+
   }
 
   @PostMapping("/subject")
   public ResponseEntity<?> addSubject(@RequestBody AddSubjectDto subjectDto) {
 
-    try {
+//    try {
       return ResponseEntity.ok().body(youniService.addNewSubject(subjectDto));
-    } catch (UniversityNotFoundException e) {
-      return ResponseEntity.internalServerError().body(e);
-    }
+//    } catch (UniversityNotFoundException | UniversitySubjectNotFoundException e) {
+//      return ResponseEntity.internalServerError().body(e.getMessage());
+//    }
 
   }
-
 }
