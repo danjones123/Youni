@@ -1,4 +1,4 @@
-package com.youni.Youni.entity;
+package com.youni.Youni.entity.compositekeys;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

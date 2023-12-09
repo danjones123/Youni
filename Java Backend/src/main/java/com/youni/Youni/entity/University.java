@@ -20,7 +20,7 @@ public class University {
 
 
   @Column(name="university_name")
-  private String universityeName;
+  private String universityName;
   @Column(name="university_location")
   private String universityLocation;
   @Column(name="university_prospectus_link")

@@ -1,5 +1,6 @@
 package com.youni.Youni.entity;
 
+import com.youni.Youni.entity.compositekeys.CompKeyUniCourseAlevelSubject;
 import lombok.*;
 
 import javax.persistence.*;

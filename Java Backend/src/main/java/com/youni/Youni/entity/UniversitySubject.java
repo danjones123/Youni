@@ -15,6 +15,7 @@ public class UniversitySubject {
 
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name="university_subject_id", nullable = false)
   private Integer universitySubjectId;
 
