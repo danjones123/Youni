@@ -3,10 +3,7 @@ package com.youni.Youni.entity;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -19,6 +16,7 @@ public class AlevelSubject {
 
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "alevel_subject_id", nullable = false)
   private Integer alevelSubjectId;
 

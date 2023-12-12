@@ -2,10 +2,12 @@ package com.youni.Youni.controller;
 
 import com.youni.Youni.dto.AddSubjectDto;
 import com.youni.Youni.dto.AddSubjectRankingDto;
+import com.youni.Youni.dto.AddUniCourseDto;
 import com.youni.Youni.entity.*;
+import com.youni.Youni.exception.DuplicateUniversitySubjectException;
 import com.youni.Youni.exception.UniversityNotFoundException;
 import com.youni.Youni.exception.UniversitySubjectNotFoundException;
-import com.youni.Youni.service.YouniService;
+import com.youni.Youni.service.YouniCrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,46 +15,46 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/youni")
-public class YouniController {
-
+@RequestMapping("/younicrud")
+public class YouniCrudController {
+//TODO rename to crud controller
   @Autowired
-  private YouniService youniService;
+  private YouniCrudService youniCrudService;
 
   @GetMapping("/course")
   public List<UniversityCourse> getAllUniCourses() {
 
-    return youniService.getAllUniCourse();
+    return youniCrudService.getAllUniCourse();
   }
 
   @GetMapping("/subject")
   public List<UniversitySubject> getAllUniSubject() {
 
-    return youniService.getAllUniSubject();
+    return youniCrudService.getAllUniSubject();
   }
 
   @GetMapping("/university")
   public List<University> getAllUniversity() {
 
-    return youniService.getAllUniversity();
+    return youniCrudService.getAllUniversity();
   }
 
   @GetMapping("/alevel")
   public List<AlevelSubject> getAllAlevelSubject() {
 
-    return youniService.getAllAlevelSubject();
+    return youniCrudService.getAllAlevelSubject();
   }
 
   @GetMapping("/compkey")
   public List<CombineUniversityCourseAlevelSubject> getAllCompKey() {
-    return youniService.getAllUniCourseAlevelCompKey();
+    return youniCrudService.getAllUniCourseAlevelCompKey();
   }
 
   @PostMapping("/subjectRank")
   public ResponseEntity<?> addSubject(@RequestBody AddSubjectRankingDto subjectRankingDto) {
 
     try {
-      return ResponseEntity.ok().body(youniService.addNewSubjectRanking(subjectRankingDto));
+      return ResponseEntity.ok().body(youniCrudService.addNewSubjectRanking(subjectRankingDto));
     } catch (UniversityNotFoundException | UniversitySubjectNotFoundException e) {
       return ResponseEntity.internalServerError().body(e.getMessage());
     }
@@ -62,11 +64,20 @@ public class YouniController {
   @PostMapping("/subject")
   public ResponseEntity<?> addSubject(@RequestBody AddSubjectDto subjectDto) {
 
-//    try {
-      return ResponseEntity.ok().body(youniService.addNewSubject(subjectDto));
-//    } catch (UniversityNotFoundException | UniversitySubjectNotFoundException e) {
-//      return ResponseEntity.internalServerError().body(e.getMessage());
-//    }
+    try {
+      return ResponseEntity.ok().body(youniCrudService.addNewSubject(subjectDto));
+    } catch (DuplicateUniversitySubjectException e) {
+      return ResponseEntity.internalServerError().body(e.getMessage());
+    }
 
+  }
+
+  @PostMapping("/course")
+  public ResponseEntity<?> addUniversityCourse(@RequestBody AddUniCourseDto uniCourseDto) throws UniversitySubjectNotFoundException, UniversityNotFoundException {
+    try {
+      return ResponseEntity.ok().body(youniCrudService.addNewUniCourse(uniCourseDto));
+    } catch (UniversityNotFoundException | UniversitySubjectNotFoundException e) {
+      return ResponseEntity.internalServerError().body(e.getMessage());
+    }
   }
 }

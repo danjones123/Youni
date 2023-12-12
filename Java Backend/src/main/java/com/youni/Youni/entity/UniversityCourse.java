@@ -15,6 +15,7 @@ public class UniversityCourse {
 
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name="university_course_id", nullable = false)
   private Integer universityCourseId;
 
@@ -44,9 +45,21 @@ public class UniversityCourse {
   @Column(name="has_year_industry")
   private Boolean hasYearIndustry;
   @Column(name="has_foundation_year")
-  private String hasFoundationYear;
+  private Boolean hasFoundationYear;
 
 
-
-
+  public UniversityCourse(University university, UniversitySubject universitySubject, String courseName, String courseLengthYears, String degreeType, String ucasCode,
+                          String requiredGradesLettersUpper, String requiredGradesLettersLower, String requiredGradesIB, Boolean hasYearIndustry, Boolean hasFoundationYear) {
+    this.university = university;
+    this.universitySubject = universitySubject;
+    this.universityCourseName = courseName;
+    this.universityCourseLength = courseLengthYears;
+    this.degreeType = degreeType;
+    this.ucasCode = ucasCode;
+    this.requiredGradesLettersUpper = requiredGradesLettersUpper;
+    this.requiredGradesLettersLower = requiredGradesLettersLower;
+    this.requiredGradesIB = requiredGradesIB;
+    this.hasYearIndustry = hasYearIndustry;
+    this.hasFoundationYear = hasFoundationYear;
+  }
 }
