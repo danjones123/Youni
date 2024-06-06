@@ -3,10 +3,12 @@ package com.youni.Youni.controller;
 import com.youni.Youni.dto.AddSubjectDto;
 import com.youni.Youni.dto.AddSubjectRankingDto;
 import com.youni.Youni.dto.AddUniCourseDto;
+import com.youni.Youni.dto.ExpectedALevelGradesDto;
 import com.youni.Youni.entity.*;
 import com.youni.Youni.exception.DuplicateUniversitySubjectException;
 import com.youni.Youni.exception.UniversityNotFoundException;
 import com.youni.Youni.exception.UniversitySubjectNotFoundException;
+import com.youni.Youni.service.AdvancedOpService;
 import com.youni.Youni.service.YouniCrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +19,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/younicrud")
 public class YouniCrudController {
-//TODO rename to crud controller
   @Autowired
   private YouniCrudService youniCrudService;
+
 
   @GetMapping("/course")
   public List<UniversityCourse> getAllUniCourses() {
@@ -79,5 +81,14 @@ public class YouniCrudController {
     } catch (UniversityNotFoundException | UniversitySubjectNotFoundException e) {
       return ResponseEntity.internalServerError().body(e.getMessage());
     }
+  }
+
+
+
+
+  @GetMapping("/arrays")
+  public ResponseEntity<?> array() {
+    String[] arr = new String[]{"a", "b", "c", "d"};
+    return ResponseEntity.ok().body(arr);
   }
 }
