@@ -32,4 +32,8 @@ public class CombineUniversityCourseAlevelSubject {
   @Column(name="min_grade")
   private String minGrade;
 
+  @Enumerated(EnumType.STRING)
+  @Column(name="required_weight")
+  private SubjectWeight requiredWeight;
+
 }
