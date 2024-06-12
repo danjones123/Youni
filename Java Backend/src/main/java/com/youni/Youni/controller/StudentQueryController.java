@@ -3,6 +3,7 @@ package com.youni.Youni.controller;
 import com.youni.Youni.dto.ExpectedALevelGradesDto;
 import com.youni.Youni.dto.SuggestedSubjectAndUniversityDto;
 import com.youni.Youni.service.AdvancedOpService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,7 @@ import java.util.List;
 @RequestMapping("/student")
 public class StudentQueryController {
 
+  @Autowired
   private AdvancedOpService advancedOpService;
 
   @PostMapping("/suggestedCourse")
