@@ -8,12 +8,17 @@ import com.youni.Youni.entity.*;
 import com.youni.Youni.exception.DuplicateUniversitySubjectException;
 import com.youni.Youni.exception.UniversityNotFoundException;
 import com.youni.Youni.exception.UniversitySubjectNotFoundException;
+import com.youni.Youni.exception.UnrecognizedUniversityException;
+import com.youni.Youni.helper.ExcelHelper;
 import com.youni.Youni.service.AdvancedOpService;
+import com.youni.Youni.service.ExcelService;
 import com.youni.Youni.service.YouniCrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -21,6 +26,9 @@ import java.util.List;
 public class YouniCrudController {
   @Autowired
   private YouniCrudService youniCrudService;
+
+  @Autowired
+  private ExcelService excelService;
 
 
   @GetMapping("/course")
@@ -84,6 +92,18 @@ public class YouniCrudController {
   }
 
 
+  @PostMapping("/uploadSheet")
+  public ResponseEntity<?> uploadSheet(@RequestParam("file")MultipartFile file) {
+    if(ExcelHelper.hasExcelFormat(file)) {
+      try {
+        excelService.saveFile(file);
+        return ResponseEntity.ok().body("File saved!");
+      } catch (UnrecognizedUniversityException | RuntimeException e) {
+        return ResponseEntity.internalServerError().body(e.getMessage());
+      }
+    }
+    return ResponseEntity.badRequest().build();
+  }
 
 
   @GetMapping("/arrays")

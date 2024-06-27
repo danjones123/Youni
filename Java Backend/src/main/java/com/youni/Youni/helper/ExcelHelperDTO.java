@@ -13,7 +13,7 @@ public class ExcelHelperDTO {
   private String degreeType;
   private String requiredGradesUpper;
   private String requiredGradesLower;
-  private String requiredLetters;
+  private String requiredIB;
   private String yearIndustry;
   private String uCASCode;
   private String foundationYear;

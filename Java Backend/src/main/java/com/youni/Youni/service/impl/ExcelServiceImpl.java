@@ -1,6 +1,8 @@
 package com.youni.Youni.service.impl;
 
 import com.youni.Youni.entity.*;
+import com.youni.Youni.exception.UniversitySubjectNotFoundException;
+import com.youni.Youni.exception.UnrecognizedUniversityException;
 import com.youni.Youni.helper.ExcelHelper;
 import com.youni.Youni.helper.ExcelHelperDTO;
 import com.youni.Youni.mapper.ExcelToDbMapper;
@@ -12,8 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ExcelServiceImpl implements ExcelService {
@@ -31,13 +33,7 @@ public class ExcelServiceImpl implements ExcelService {
   @Autowired
   UniversitySubjectRepository universitySubjectRepository;
 
-
-  private AlevelSubject alevelSubject1;
-  private AlevelSubject alevelSubject2;
-  private AlevelSubject alevelSubject3;
-  private AlevelSubject alevelSubject4;
-  private AlevelSubject alevelSubject5;
-  private CombineUniversityCourseAlevelSubject combineUniversityCourseAlevelSubject;
+  private ArrayList<CombineUniversityCourseAlevelSubject> combineUniversityCourseAlevelSubjectList;
   private CombineUniversityUniversitySubject combineUniversityUniversitySubject;
   private University university;
   private UniversityCourse universityCourse;
@@ -45,7 +41,7 @@ public class ExcelServiceImpl implements ExcelService {
 
 
   @Transactional
-  public void saveFile(MultipartFile file) {
+  public void saveFile(MultipartFile file) throws UnrecognizedUniversityException {
     try {
       List<ExcelHelperDTO> subjectList = ExcelHelper.excelToDb(file.getInputStream());
 
@@ -55,8 +51,10 @@ public class ExcelServiceImpl implements ExcelService {
 
         //If uni/subject/alevel already exist then gets the entity, otherwise saves and returns
         //Saved first as they do not have any foreign key constraints but are foreign keys for other tables
-        University localUni = universityRepository.findByUniversityName(university.getUniversityName()).orElse(universityRepository.save(university));
-        UniversitySubject localUniSubject = universitySubjectRepository.findByUniversitySubjectName(universitySubject.getUniversitySubjectName()).orElse(universitySubjectRepository.save(universitySubject));
+        University localUni = universityRepository.findByUniversityName(university.getUniversityName()).orElseThrow(
+            () ->  new UnrecognizedUniversityException("University " + university.getUniversityName() + " not recognised"));
+        UniversitySubject localUniSubject = universitySubjectRepository.findByUniversitySubjectName(
+            universitySubject.getUniversitySubjectName()).orElse(universitySubjectRepository.save(universitySubject));
 
         //Sets the foreign key parts of the other entities and saves
         universityCourse.setUniversity(localUni);
@@ -67,32 +65,60 @@ public class ExcelServiceImpl implements ExcelService {
         combineUniversityUniversitySubject.setUniversitySubject(localUniSubject);
         compKeyUniSubjectRepository.save(combineUniversityUniversitySubject);
 
-
-        if (alevelSubject1 != null) {
-          AlevelSubject localAlevel1 = alevelSubjectRepository.findByAlevelSubjectName(alevelSubject1.getAlevelSubjectName()).orElse(alevelSubjectRepository.save(alevelSubject1));
-          combineUniversityCourseAlevelSubject.setAlevelSubject(localAlevel1);
-          combineUniversityCourseAlevelSubject.setUniversityCourse(localUniCourse);
-          compKeyUniAlevelRepository.save(combineUniversityCourseAlevelSubject);
+        for(CombineUniversityCourseAlevelSubject combineUniAndAlevelSubject : combineUniversityCourseAlevelSubjectList) {
+          combineUniAndAlevelSubject.setUniversityCourse(localUniCourse);
+          AlevelSubject localAlevel = alevelSubjectRepository.findByAlevelSubjectName(combineUniAndAlevelSubject.getAlevelSubject().getAlevelSubjectName()).orElse(alevelSubjectRepository.save(combineUniAndAlevelSubject.getAlevelSubject()));
+          combineUniAndAlevelSubject.setAlevelSubject(localAlevel);
+          compKeyUniAlevelRepository.save(combineUniAndAlevelSubject);
         }
+
+
+
+        //Varying sizes of recommended subjects so checks all and then
+//        if (alevelSubject1 != null) {
+//          AlevelSubject localAlevel1 = alevelSubjectRepository.findByAlevelSubjectName(alevelSubject1.getAlevelSubjectName()).orElse(alevelSubjectRepository.save(alevelSubject1));
+//          combineUniversityCourseAlevelSubject.setAlevelSubject(localAlevel1);
+//          compKeyUniAlevelRepository.save(combineUniversityCourseAlevelSubject);
+//        }
+
+//        if (alevelSubject2 != null) {
+//          AlevelSubject localAlevel2 = alevelSubjectRepository.findByAlevelSubjectName(alevelSubject2.getAlevelSubjectName()).orElse(alevelSubjectRepository.save(alevelSubject2));
+//          combineUniversityCourseAlevelSubject.setAlevelSubject(localAlevel2);
+//          compKeyUniAlevelRepository.save(combineUniversityCourseAlevelSubject);
+//        }
+//
+//        if (alevelSubject3 != null) {
+//          AlevelSubject localAlevel3 = alevelSubjectRepository.findByAlevelSubjectName(alevelSubject3.getAlevelSubjectName()).orElse(alevelSubjectRepository.save(alevelSubject3));
+//          combineUniversityCourseAlevelSubject.setAlevelSubject(localAlevel3);
+//          compKeyUniAlevelRepository.save(combineUniversityCourseAlevelSubject);
+//        }
+//
+//        if (alevelSubject4 != null) {
+//          AlevelSubject localAlevel4 = alevelSubjectRepository.findByAlevelSubjectName(alevelSubject4.getAlevelSubjectName()).orElse(alevelSubjectRepository.save(alevelSubject4));
+//          combineUniversityCourseAlevelSubject.setAlevelSubject(localAlevel4);
+//          compKeyUniAlevelRepository.save(combineUniversityCourseAlevelSubject);
+//        }
+//
+//        if (alevelSubject5 != null) {
+//          AlevelSubject localAlevel5 = alevelSubjectRepository.findByAlevelSubjectName(alevelSubject5.getAlevelSubjectName()).orElse(alevelSubjectRepository.save(alevelSubject5));
+//          combineUniversityCourseAlevelSubject.setAlevelSubject(localAlevel5);
+//          compKeyUniAlevelRepository.save(combineUniversityCourseAlevelSubject);
+//        }
 
       }
 
     } catch (IOException e ){
       throw new RuntimeException("Failed to store excel: " + e.getMessage());
+    } catch (UnrecognizedUniversityException e) {
+      throw new UnrecognizedUniversityException(e.getMessage());
     }
   }
 
 
   private void mapExcelData(ExcelHelperDTO excelHelperDTO) {
 
+    combineUniversityCourseAlevelSubjectList = ExcelToDbMapper.mapToUniversityCourseALevelSubject(excelHelperDTO);
 
-    alevelSubject1 = ExcelToDbMapper.mapToAlevelSubject(excelHelperDTO);
-    alevelSubject2 = ExcelToDbMapper.mapToAlevelSubject(excelHelperDTO);
-    alevelSubject3 = ExcelToDbMapper.mapToAlevelSubject(excelHelperDTO);
-    alevelSubject4 = ExcelToDbMapper.mapToAlevelSubject(excelHelperDTO);
-    alevelSubject5 = ExcelToDbMapper.mapToAlevelSubject(excelHelperDTO);
-
-    combineUniversityCourseAlevelSubject = ExcelToDbMapper.mapToUniversityCourseALevelSubject(excelHelperDTO);
     combineUniversityUniversitySubject = ExcelToDbMapper.mapToUniversityUniversitySubject(excelHelperDTO);
     university = ExcelToDbMapper.mapToUniversity(excelHelperDTO);
     universityCourse = ExcelToDbMapper.mapToUniversityCourse(excelHelperDTO);
