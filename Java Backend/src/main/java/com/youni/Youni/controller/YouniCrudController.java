@@ -99,6 +99,7 @@ public class YouniCrudController {
         excelService.saveFile(file);
         return ResponseEntity.ok().body("File saved!");
       } catch (UnrecognizedUniversityException | RuntimeException e) {
+        e.printStackTrace();
         return ResponseEntity.internalServerError().body(e.getMessage());
       }
     }

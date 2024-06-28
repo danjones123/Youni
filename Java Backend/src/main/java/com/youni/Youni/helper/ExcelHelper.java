@@ -58,33 +58,33 @@ public class ExcelHelper {
           //Need to update to handle empty cells, or ensure no cells empty in sheet
 
           switch (cellIdx) {
-            case 0 -> excelHelperDTO.setUniversityName(currentCell.getStringCellValue());
-            case 1 -> excelHelperDTO.setUniversitySubject(currentCell.getStringCellValue());
-            case 2 -> excelHelperDTO.setUniversitySubjectRank(String.valueOf(currentCell.getNumericCellValue()));
-            case 3 -> excelHelperDTO.setCourseName(currentCell.getStringCellValue());
-            case 4 -> excelHelperDTO.setCourseLength(String.valueOf(currentCell.getNumericCellValue()));
-            case 5 -> excelHelperDTO.setDegreeType(currentCell.getStringCellValue());
-            case 6 -> excelHelperDTO.setRequiredGradesUpper(currentCell.getStringCellValue());
-            case 7 -> excelHelperDTO.setRequiredGradesLower(currentCell.getStringCellValue());
-            case 8 -> excelHelperDTO.setRequiredIB(currentCell.getStringCellValue());
-            case 9 -> excelHelperDTO.setYearIndustry(currentCell.getStringCellValue());
-            case 10 -> excelHelperDTO.setUCASCode(currentCell.getStringCellValue());
-            case 11 -> excelHelperDTO.setFoundationYear(currentCell.getStringCellValue());
-            case 12 -> excelHelperDTO.setAlevel1(currentCell.getStringCellValue());
-            case 13 -> excelHelperDTO.setAlevelGrade1(currentCell.getStringCellValue());
-            case 14 -> excelHelperDTO.setRecType1(currentCell.getStringCellValue());
-            case 15 -> excelHelperDTO.setAlevel2(currentCell.getStringCellValue());
-            case 16 -> excelHelperDTO.setAlevelGrade2(currentCell.getStringCellValue());
-            case 17 -> excelHelperDTO.setRecType2(currentCell.getStringCellValue());
-            case 18 -> excelHelperDTO.setAlevel3(currentCell.getStringCellValue());
-            case 19 -> excelHelperDTO.setAlevelGrade3(currentCell.getStringCellValue());
-            case 20 -> excelHelperDTO.setRecType3(currentCell.getStringCellValue());
-            case 21 -> excelHelperDTO.setAlevel4(currentCell.getStringCellValue());
-            case 22 -> excelHelperDTO.setAlevelGrade4(currentCell.getStringCellValue());
-            case 23 -> excelHelperDTO.setRecType4(currentCell.getStringCellValue());
-            case 24 -> excelHelperDTO.setAlevel5(currentCell.getStringCellValue());
-            case 25 -> excelHelperDTO.setAlevelGrade5(currentCell.getStringCellValue());
-            case 26 -> excelHelperDTO.setRecType5(currentCell.getStringCellValue());
+            case 0 -> excelHelperDTO.setUniversityName(checkNull(currentCell.getStringCellValue()));
+            case 1 -> excelHelperDTO.setUniversitySubject(checkNull(currentCell.getStringCellValue()));
+            case 2 -> excelHelperDTO.setUniversitySubjectRank(checkNull(String.valueOf(currentCell.getNumericCellValue())));
+            case 3 -> excelHelperDTO.setCourseName(checkNull(currentCell.getStringCellValue()));
+            case 4 -> excelHelperDTO.setCourseLength(checkNull(String.valueOf(currentCell.getNumericCellValue())));
+            case 5 -> excelHelperDTO.setDegreeType(checkNull(currentCell.getStringCellValue()));
+            case 6 -> excelHelperDTO.setRequiredGradesUpper(checkNull(currentCell.getStringCellValue()));
+            case 7 -> excelHelperDTO.setRequiredGradesLower(checkNull(currentCell.getStringCellValue()));
+            case 8 -> excelHelperDTO.setRequiredIB(checkNull(currentCell.getStringCellValue()));
+            case 9 -> excelHelperDTO.setYearIndustry(checkNull(currentCell.getStringCellValue()));
+            case 10 -> excelHelperDTO.setUCASCode(checkNull(currentCell.getStringCellValue()));
+            case 11 -> excelHelperDTO.setFoundationYear(checkNull(currentCell.getStringCellValue()));
+            case 12 -> excelHelperDTO.setAlevel1(checkNull(currentCell.getStringCellValue()));
+            case 13 -> excelHelperDTO.setAlevelGrade1(checkNull(currentCell.getStringCellValue()));
+            case 14 -> excelHelperDTO.setRecType1(checkNull(currentCell.getStringCellValue()));
+            case 15 -> excelHelperDTO.setAlevel2(checkNull(currentCell.getStringCellValue()));
+            case 16 -> excelHelperDTO.setAlevelGrade2(checkNull(currentCell.getStringCellValue()));
+            case 17 -> excelHelperDTO.setRecType2(checkNull(currentCell.getStringCellValue()));
+            case 18 -> excelHelperDTO.setAlevel3(checkNull(currentCell.getStringCellValue()));
+            case 19 -> excelHelperDTO.setAlevelGrade3(checkNull(currentCell.getStringCellValue()));
+            case 20 -> excelHelperDTO.setRecType3(checkNull(currentCell.getStringCellValue()));
+            case 21 -> excelHelperDTO.setAlevel4(checkNull(currentCell.getStringCellValue()));
+            case 22 -> excelHelperDTO.setAlevelGrade4(checkNull(currentCell.getStringCellValue()));
+            case 23 -> excelHelperDTO.setRecType4(checkNull(currentCell.getStringCellValue()));
+            case 24 -> excelHelperDTO.setAlevel5(checkNull(currentCell.getStringCellValue()));
+            case 25 -> excelHelperDTO.setAlevelGrade5(checkNull(currentCell.getStringCellValue()));
+            case 26 -> excelHelperDTO.setRecType5(checkNull(currentCell.getStringCellValue()));
             default -> {
             }
           }
@@ -101,6 +101,13 @@ public class ExcelHelper {
     } catch (IOException e) {
       throw new RuntimeException("fail to parse Excel file: " + e.getMessage());
     }
+  }
+
+  private static String checkNull(String input) {
+    if(input.equals("nulL")) {
+      return null;
+    }
+    return input;
   }
 
 }
