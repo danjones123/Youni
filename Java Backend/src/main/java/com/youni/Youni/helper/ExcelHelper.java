@@ -104,7 +104,7 @@ public class ExcelHelper {
   }
 
   private static String checkNull(String input) {
-    if(input.equals("nulL")) {
+    if(input.equals("null")) {
       return null;
     }
     return input;

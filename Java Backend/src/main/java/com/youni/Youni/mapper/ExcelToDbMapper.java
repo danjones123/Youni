@@ -16,7 +16,7 @@ public class ExcelToDbMapper {
 
 //    ArrayList<AlevelSubject> outputList = new ArrayList<>();
 
-    if (!excelHelperDTO.getAlevel1().equals("") && excelHelperDTO.getAlevel1() != null && !excelHelperDTO.getAlevel1().equals("null")) {
+    if (excelHelperDTO.getAlevel1() != null && !excelHelperDTO.getAlevel1().equals("") && !excelHelperDTO.getAlevel1().equals("null")) {
       AlevelSubject alevelSubject = new AlevelSubject();
       alevelSubject.setAlevelSubjectName(excelHelperDTO.getAlevel1());
 //      UniversityCourse universityCourse = new UniversityCourse();
@@ -32,7 +32,7 @@ public class ExcelToDbMapper {
       outputList.add(combineUniAndAlevelSubject);
     }
 
-    if (!excelHelperDTO.getAlevel2().equals("") && excelHelperDTO.getAlevel2() != null && !excelHelperDTO.getAlevel2().equals("null")) {
+    if (excelHelperDTO.getAlevel2() != null && !excelHelperDTO.getAlevel2().equals("") && !excelHelperDTO.getAlevel2().equals("null")) {
       AlevelSubject alevelSubject = new AlevelSubject();
       alevelSubject.setAlevelSubjectName(excelHelperDTO.getAlevel2());
 //      UniversityCourse universityCourse = new UniversityCourse();
@@ -47,7 +47,7 @@ public class ExcelToDbMapper {
 
       outputList.add(combineUniAndAlevelSubject);
     }
-    if (!excelHelperDTO.getAlevel3().equals("") && excelHelperDTO.getAlevel3() != null && !excelHelperDTO.getAlevel3().equals("null")) {
+    if (excelHelperDTO.getAlevel3() != null && !excelHelperDTO.getAlevel3().equals("") && !excelHelperDTO.getAlevel3().equals("null")) {
       AlevelSubject alevelSubject = new AlevelSubject();
       alevelSubject.setAlevelSubjectName(excelHelperDTO.getAlevel3());
 //      UniversityCourse universityCourse = new UniversityCourse();
@@ -63,7 +63,7 @@ public class ExcelToDbMapper {
       outputList.add(combineUniAndAlevelSubject);
     }
 
-    if (!excelHelperDTO.getAlevel4().equals("") && excelHelperDTO.getAlevel4() != null && !excelHelperDTO.getAlevel4().equals("null")) {
+    if (excelHelperDTO.getAlevel4() != null && !excelHelperDTO.getAlevel4().equals("") && !excelHelperDTO.getAlevel4().equals("null")) {
       AlevelSubject alevelSubject = new AlevelSubject();
       alevelSubject.setAlevelSubjectName(excelHelperDTO.getAlevel4());
 //      UniversityCourse universityCourse = new UniversityCourse();
@@ -79,7 +79,7 @@ public class ExcelToDbMapper {
       outputList.add(combineUniAndAlevelSubject);
     }
 
-    if (!excelHelperDTO.getAlevel5().equals("") && excelHelperDTO.getAlevel5() != null && !excelHelperDTO.getAlevel5().equals("null")) {
+    if (excelHelperDTO.getAlevel5() != null && !excelHelperDTO.getAlevel5().equals("") && !excelHelperDTO.getAlevel5().equals("null")) {
       AlevelSubject alevelSubject = new AlevelSubject();
       alevelSubject.setAlevelSubjectName(excelHelperDTO.getAlevel5());
 //      UniversityCourse universityCourse = new UniversityCourse();
