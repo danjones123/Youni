@@ -22,40 +22,56 @@ public class AdvancedOpServiceImpl implements AdvancedOpService {
   @Override
   public List<SuggestedSubjectAndUniversityDto> suggestCourseFromAlevels(ExpectedALevelGradesDto expectedALevelGradesDto) {
 
-    //Takes a-level subjects and converts to array
+    //TODO Update to combine the expected grade and courses into combined object and then check. Means no duplicates and more accurate weighting (eg higher weighting if multiple common subjects)
+
+
+    //Takes a-level subjects from user and converts to array
     String[] alevelSubjects = expectedALevelGradesDto.getAlevelSubjectGrades().keySet().toArray(new String[0]);
 
     List<CombineUniversityCourseAlevelSubject> combineUniversityCourseAlevelSubjectList = youniCrudService.getAllUniCourseAlevelCompKey();
     ArrayList<SuggestedSubjectAndUniversityDto> outputList = new ArrayList<>();
+    List<CombineUniversityCourseAlevelSubject> overlapSubjects = new ArrayList<>();
 
     //Go through the list of subjects that have recommended subjects and checks if they contain the subjects that the student is taking
     for (CombineUniversityCourseAlevelSubject combineUniversityCourseAlevelSubject : combineUniversityCourseAlevelSubjectList) {
+      if(!expectedALevelGradesDto.getAlevelSubjectGrades().containsKey(combineUniversityCourseAlevelSubject.getAlevelSubject().getAlevelSubjectName())) {
+        SuggestedSubjectAndUniversityDto suggestedSubjectAndUniversityDto = new SuggestedSubjectAndUniversityDto();
+        suggestedSubjectAndUniversityDto.setSubjectName(combineUniversityCourseAlevelSubject.getUniversityCourse().getUniversityCourseName());
+        suggestedSubjectAndUniversityDto.setUniversityName(combineUniversityCourseAlevelSubject.getUniversityCourse().getUniversity().getUniversityName());
+        suggestedSubjectAndUniversityDto.setRecommendedWeighting(4);
+        outputList.add(suggestedSubjectAndUniversityDto);
+      } else {
+        overlapSubjects.add(combineUniversityCourseAlevelSubject);
+      }
+    }
+
+    for(CombineUniversityCourseAlevelSubject combineUniversityCourseAlevelSubject : overlapSubjects) {
+
       for (String subject : alevelSubjects) {
 
         SuggestedSubjectAndUniversityDto suggestedSubjectAndUniversityDto = new SuggestedSubjectAndUniversityDto();
+        if (!subject.equals(combineUniversityCourseAlevelSubject.getAlevelSubject().getAlevelSubjectName())) {
+        continue;
+        }
+
+        if (combineUniversityCourseAlevelSubject.getRequiredWeight().toString().equals("REQUIRED") ||
+            combineUniversityCourseAlevelSubject.getRequiredWeight().toString().equals("REQUIRED_MULTIPLE")) {
+
+          suggestedSubjectAndUniversityDto.setRecommendedWeighting(1);
+        } else {
+          //This should not be hit but is added incase there is issue with data
+          //Possibly would be better to add the "Recommended" subjects as the else statement?
+          suggestedSubjectAndUniversityDto.setRecommendedWeighting(2);
+        }
         suggestedSubjectAndUniversityDto.setSubjectName(combineUniversityCourseAlevelSubject.getUniversityCourse().getUniversityCourseName());
         suggestedSubjectAndUniversityDto.setUniversityName(combineUniversityCourseAlevelSubject.getUniversityCourse().getUniversity().getUniversityName());
 
         //If the alevel subjects is recommended or required for a uni course, adds that course to the output list with a weighting
-        if (subject.equals(combineUniversityCourseAlevelSubject.getAlevelSubject().getAlevelSubjectName())) {
-          if (combineUniversityCourseAlevelSubject.getRequiredWeight().toString().equals("REQUIRED") ||
-              combineUniversityCourseAlevelSubject.getRequiredWeight().toString().equals("REQUIRED_MULTIPLE")) {
-
-            suggestedSubjectAndUniversityDto.setRecommendedWeighting(1);
-          } else if ((combineUniversityCourseAlevelSubject.getRequiredWeight().toString().equals("RECOMMENDED"))) {
-            suggestedSubjectAndUniversityDto.setRecommendedWeighting(2);
-          } else {
-            //This should not be hit but is added incase there is issue with data
-            //Possibly would be better to add the "Recommended" subjects as the else statement?
-            suggestedSubjectAndUniversityDto.setRecommendedWeighting(4);
-          }
-        }else {
-          suggestedSubjectAndUniversityDto.setRecommendedWeighting(4);
-        }
 
         outputList.add(suggestedSubjectAndUniversityDto);
       }
     }
+
 
     outputList.sort(Comparator.comparingInt(SuggestedSubjectAndUniversityDto::getRecommendedWeighting));
 
