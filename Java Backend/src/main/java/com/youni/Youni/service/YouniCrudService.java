@@ -31,4 +31,6 @@ public interface YouniCrudService {
   List<UniSubjectRankingResponseDto> getAllUniSubjectCompKey();
 
   List<UniversityCourse> addNewUniCourse(AddUniCourseDto uniCourseDto) throws UniversitySubjectNotFoundException, UniversityNotFoundException;
+
+  List<CombineUniversityCourseAlevelSubject> getUniCourseAlevels(int uniCourseId);
 }

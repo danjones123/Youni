@@ -106,10 +106,16 @@ public class YouniCrudController {
     return ResponseEntity.badRequest().build();
   }
 
+  @GetMapping("/course-required/{id}")
+  public ResponseEntity<?> getUniCourseAlevels(@PathVariable int id) {
+    return ResponseEntity.ok(youniCrudService.getUniCourseAlevels(id));
+  }
+
 
   @GetMapping("/arrays")
   public ResponseEntity<?> array() {
     String[] arr = new String[]{"a", "b", "c", "d"};
     return ResponseEntity.ok().body(arr);
   }
+
 }
