@@ -111,6 +111,11 @@ public class YouniCrudController {
     return ResponseEntity.ok(youniCrudService.getUniCourseAlevels(id));
   }
 
+  @GetMapping("/course-required-list")
+  public ResponseEntity<?> getUniCourseAlevels() {
+    return ResponseEntity.ok(youniCrudService.getAllUniCourseAlevels());
+  }
+
 
   @GetMapping("/arrays")
   public ResponseEntity<?> array() {

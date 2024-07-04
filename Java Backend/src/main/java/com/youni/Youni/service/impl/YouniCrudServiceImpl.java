@@ -1,11 +1,7 @@
 package com.youni.Youni.service.impl;
 
-import com.youni.Youni.dto.AddSubjectDto;
-import com.youni.Youni.dto.AddSubjectRankingDto;
-import com.youni.Youni.dto.AddUniCourseDto;
-import com.youni.Youni.dto.UniSubjectRankingResponseDto;
+import com.youni.Youni.dto.*;
 import com.youni.Youni.entity.*;
-import com.youni.Youni.entity.compositekeys.CompKeyUniCourseAlevelSubject;
 import com.youni.Youni.entity.compositekeys.CompKeyUniUniSubject;
 import com.youni.Youni.exception.DuplicateUniversitySubjectException;
 import com.youni.Youni.exception.UniversityNotFoundException;
@@ -157,22 +153,68 @@ public class YouniCrudServiceImpl implements YouniCrudService {
     return getAllUniCourse();
   }
 
+
   @Override
-  public List<CombineUniversityCourseAlevelSubject> getUniCourseAlevels(int uniCourseId) {
+  public List<UniCourseAndRecommendedAlevels> getAllUniCourseAlevels() {
+    ArrayList<UniCourseAndRecommendedAlevels> uniCourseAndRecommendedAlevelsList = new ArrayList<>();
+    for (UniversityCourse universityCourse : getAllUniCourse()) {
+      uniCourseAndRecommendedAlevelsList.add(getUniCourseAlevels(universityCourse.getUniversityCourseId()));
+    }
+    return uniCourseAndRecommendedAlevelsList;
+  }
+
+  @Override
+  public UniCourseAndRecommendedAlevels getUniCourseAlevels(int uniCourseId) {
     Optional<UniversityCourse> universityCourse = courseRepository.findById(uniCourseId);
     if(universityCourse.isEmpty()) {
       return null;
     }
-    return compKeyUniAlevelRepository.findByUniversityCourse(universityCourse.get());
+    List<CombineUniversityCourseAlevelSubject> combinedList = compKeyUniAlevelRepository.findByUniversityCourse(universityCourse.get());
+
+    if (combinedList.isEmpty()) {
+      return cleanDuplicateCourse(universityCourse.get());
+    } else {
+      return cleanDuplicateCourse(combinedList);
+    }
+
   }
 
+  private static UniCourseAndRecommendedAlevels cleanDuplicateCourse(UniversityCourse universityCourse) {
+
+    //TODO refactor into cleaner methods
 
 
-  //TODO Crud request for all of the tables
-  // POST courses
-  // need a bulk upload for the courses from a spreadsheet
-  // POST combine Course/Alevel
-  //TODO new service for the business logic separated from simple CRUD
+    UniCourseAndRecommendedAlevels uniCourseAndRecommendedAlevels = new UniCourseAndRecommendedAlevels();
+    uniCourseAndRecommendedAlevels.setCourseName(universityCourse.getUniversityCourseName());
+    uniCourseAndRecommendedAlevels.setUniversityName(universityCourse.getUniversity().getUniversityName());
+    uniCourseAndRecommendedAlevels.setUniversitySubjectName(universityCourse.getUniversitySubject().getUniversitySubjectName());
+    uniCourseAndRecommendedAlevels.setMinGrades(universityCourse.getRequiredGradesLettersLower());
+    uniCourseAndRecommendedAlevels.setAlevelSubjects(new ArrayList<>());
+
+    return uniCourseAndRecommendedAlevels;
+  }
+
+  private static UniCourseAndRecommendedAlevels cleanDuplicateCourse(List<CombineUniversityCourseAlevelSubject> combineUniversityCourseAlevelSubject) {
+    CombineUniversityCourseAlevelSubject firstCombineObject = combineUniversityCourseAlevelSubject.get(0);
+
+    UniCourseAndRecommendedAlevels uniCourseAndRecommendedAlevels = new UniCourseAndRecommendedAlevels();
+    uniCourseAndRecommendedAlevels.setCourseName(firstCombineObject.getUniversityCourse().getUniversityCourseName());
+    uniCourseAndRecommendedAlevels.setUniversityName(firstCombineObject.getUniversityCourse().getUniversity().getUniversityName());
+    uniCourseAndRecommendedAlevels.setUniversitySubjectName(firstCombineObject.getUniversityCourse().getUniversitySubject().getUniversitySubjectName());
+    uniCourseAndRecommendedAlevels.setMinGrades(firstCombineObject.getUniversityCourse().getRequiredGradesLettersLower());
+    ArrayList<RecommendedAlevelsDto> alevelsDtoArrayList = new ArrayList<>();
+    for(CombineUniversityCourseAlevelSubject combinedObj : combineUniversityCourseAlevelSubject) {
+      RecommendedAlevelsDto recommendedAlevelsDto = new RecommendedAlevelsDto();
+      recommendedAlevelsDto.setAlevelName(combinedObj.getAlevelSubject().getAlevelSubjectName());
+      recommendedAlevelsDto.setMinGrade(combinedObj.getMinGrade());
+      recommendedAlevelsDto.setSubjectWeight(combinedObj.getRequiredWeight());
+      alevelsDtoArrayList.add(recommendedAlevelsDto);
+    }
+    uniCourseAndRecommendedAlevels.setAlevelSubjects(alevelsDtoArrayList);
+
+    return uniCourseAndRecommendedAlevels;
+    //TODO add chaching so that this call doesn't need to be made each time
+  }
 
 
 }

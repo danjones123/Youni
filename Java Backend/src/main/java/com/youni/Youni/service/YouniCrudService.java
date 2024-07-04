@@ -1,9 +1,6 @@
 package com.youni.Youni.service;
 
-import com.youni.Youni.dto.AddSubjectDto;
-import com.youni.Youni.dto.AddSubjectRankingDto;
-import com.youni.Youni.dto.AddUniCourseDto;
-import com.youni.Youni.dto.UniSubjectRankingResponseDto;
+import com.youni.Youni.dto.*;
 import com.youni.Youni.entity.*;
 import com.youni.Youni.exception.DuplicateUniversitySubjectException;
 import com.youni.Youni.exception.UniversityNotFoundException;
@@ -32,5 +29,7 @@ public interface YouniCrudService {
 
   List<UniversityCourse> addNewUniCourse(AddUniCourseDto uniCourseDto) throws UniversitySubjectNotFoundException, UniversityNotFoundException;
 
-  List<CombineUniversityCourseAlevelSubject> getUniCourseAlevels(int uniCourseId);
+  UniCourseAndRecommendedAlevels getUniCourseAlevels(int uniCourseId);
+
+  List<UniCourseAndRecommendedAlevels> getAllUniCourseAlevels();
 }
