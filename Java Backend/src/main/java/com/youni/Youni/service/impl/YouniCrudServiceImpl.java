@@ -181,14 +181,9 @@ public class YouniCrudServiceImpl implements YouniCrudService {
 
   private static UniCourseAndRecommendedAlevels cleanDuplicateCourse(UniversityCourse universityCourse) {
 
-    //TODO refactor into cleaner methods
+    //TODO add subject rank
 
-
-    UniCourseAndRecommendedAlevels uniCourseAndRecommendedAlevels = new UniCourseAndRecommendedAlevels();
-    uniCourseAndRecommendedAlevels.setCourseName(universityCourse.getUniversityCourseName());
-    uniCourseAndRecommendedAlevels.setUniversityName(universityCourse.getUniversity().getUniversityName());
-    uniCourseAndRecommendedAlevels.setUniversitySubjectName(universityCourse.getUniversitySubject().getUniversitySubjectName());
-    uniCourseAndRecommendedAlevels.setMinGrades(universityCourse.getRequiredGradesLettersLower());
+    UniCourseAndRecommendedAlevels uniCourseAndRecommendedAlevels = addBasicFeaturesToCourseAlevelObj(universityCourse);
     uniCourseAndRecommendedAlevels.setAlevelSubjects(new ArrayList<>());
 
     return uniCourseAndRecommendedAlevels;
@@ -197,11 +192,7 @@ public class YouniCrudServiceImpl implements YouniCrudService {
   private static UniCourseAndRecommendedAlevels cleanDuplicateCourse(List<CombineUniversityCourseAlevelSubject> combineUniversityCourseAlevelSubject) {
     CombineUniversityCourseAlevelSubject firstCombineObject = combineUniversityCourseAlevelSubject.get(0);
 
-    UniCourseAndRecommendedAlevels uniCourseAndRecommendedAlevels = new UniCourseAndRecommendedAlevels();
-    uniCourseAndRecommendedAlevels.setCourseName(firstCombineObject.getUniversityCourse().getUniversityCourseName());
-    uniCourseAndRecommendedAlevels.setUniversityName(firstCombineObject.getUniversityCourse().getUniversity().getUniversityName());
-    uniCourseAndRecommendedAlevels.setUniversitySubjectName(firstCombineObject.getUniversityCourse().getUniversitySubject().getUniversitySubjectName());
-    uniCourseAndRecommendedAlevels.setMinGrades(firstCombineObject.getUniversityCourse().getRequiredGradesLettersLower());
+    UniCourseAndRecommendedAlevels uniCourseAndRecommendedAlevels = addBasicFeaturesToCourseAlevelObj(firstCombineObject.getUniversityCourse());
     ArrayList<RecommendedAlevelsDto> alevelsDtoArrayList = new ArrayList<>();
     for(CombineUniversityCourseAlevelSubject combinedObj : combineUniversityCourseAlevelSubject) {
       RecommendedAlevelsDto recommendedAlevelsDto = new RecommendedAlevelsDto();
@@ -213,8 +204,18 @@ public class YouniCrudServiceImpl implements YouniCrudService {
     uniCourseAndRecommendedAlevels.setAlevelSubjects(alevelsDtoArrayList);
 
     return uniCourseAndRecommendedAlevels;
-    //TODO add chaching so that this call doesn't need to be made each time
+    //TODO add caching so that this call doesn't need to be made each time
   }
 
+  private static UniCourseAndRecommendedAlevels addBasicFeaturesToCourseAlevelObj(UniversityCourse universityCourse) {
+    UniCourseAndRecommendedAlevels uniCourseAndRecommendedAlevels = new UniCourseAndRecommendedAlevels();
+    uniCourseAndRecommendedAlevels.setCourseName(universityCourse.getUniversityCourseName());
+    uniCourseAndRecommendedAlevels.setUniversityName(universityCourse.getUniversity().getUniversityName());
+    uniCourseAndRecommendedAlevels.setUniversitySubjectName(universityCourse.getUniversitySubject().getUniversitySubjectName());
+    uniCourseAndRecommendedAlevels.setMinGrades(universityCourse.getRequiredGradesLettersLower());
+
+    return uniCourseAndRecommendedAlevels;
+
+  }
 
 }

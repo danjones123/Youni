@@ -6,6 +6,7 @@ import lombok.Data;
 public class SuggestedSubjectAndUniversityDto {
   private String universityName;
   private String subjectName;
+  private String courseName;
   private String subjectRanking;
   private Integer recommendedWeighting;
 }

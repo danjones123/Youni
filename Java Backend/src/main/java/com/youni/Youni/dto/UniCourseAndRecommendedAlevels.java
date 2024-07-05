@@ -10,6 +10,7 @@ public class UniCourseAndRecommendedAlevels {
   private String universityName;
   private String universitySubjectName;
   private String minGrades;
+  private String subjectRank;
   private ArrayList<RecommendedAlevelsDto> alevelSubjects;
 
 }
